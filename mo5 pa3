@@ -1,0 +1,59 @@
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
+public class TextColorSelector extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        // Create labels to display color values
+        Label redLabel = new Label("Red:");
+        Label greenLabel = new Label("Green:");
+        Label blueLabel = new Label("Blue:");
+        Label opacityLabel = new Label("Opacity:");
+
+        // Create sliders for selecting color components
+        Slider redSlider = new Slider(0, 255, 0);
+        Slider greenSlider = new Slider(0, 255, 0);
+        Slider blueSlider = new Slider(0, 255, 0);
+        Slider opacitySlider = new Slider(0, 1, 1);
+
+        // Create a label to display color preview
+        Label colorPreview = new Label();
+        colorPreview.setFont(new Font(20));
+        colorPreview.setText("Text Color Preview");
+
+        // Bind color preview label with slider values
+        colorPreview.textFillProperty().bind(
+                javafx.beans.binding.Bindings.createObjectBinding(() ->
+                        Color.rgb((int) redSlider.getValue(), (int) greenSlider.getValue(), (int) blueSlider.getValue(), opacitySlider.getValue()),
+                        redSlider.valueProperty(), greenSlider.valueProperty(), blueSlider.valueProperty(), opacitySlider.valueProperty()
+                )
+        );
+
+        // Create a GridPane layout to arrange components
+        GridPane root = new GridPane();
+        root.setHgap(10);
+        root.setVgap(10);
+        root.addRow(0, redLabel, redSlider);
+        root.addRow(1, greenLabel, greenSlider);
+        root.addRow(2, blueLabel, blueSlider);
+        root.addRow(3, opacityLabel, opacitySlider);
+        root.addRow(4, colorPreview);
+
+        // Create a scene and set it on the stage
+        Scene scene = new Scene(root, 300, 200);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Text Color Selector");
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
